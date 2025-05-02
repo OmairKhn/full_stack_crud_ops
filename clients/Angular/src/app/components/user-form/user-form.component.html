@@ -1,0 +1,85 @@
+<div class="container mt-4">
+    <h2>{{ userId ? 'Edit' : 'Add' }} User</h2>
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+      <!-- Name Field -->
+      <div class="mb-3">
+        <label>Name</label>
+        <input 
+          [(ngModel)]="user.name" 
+          name="name" 
+          class="form-control" 
+          required 
+          #name="ngModel">
+        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger">
+          Please fill the name input.
+        </div>
+      </div>
+  
+      <!-- Email Field -->
+      <div class="mb-3">
+        <label>Email</label>
+        <input 
+          [(ngModel)]="user.email" 
+          name="email" 
+          type="email" 
+          class="form-control" 
+          required 
+          #email="ngModel">
+        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+          Please fill the email input.
+        </div>
+      </div>
+  
+      <!-- Age Field -->
+      <div class="mb-3">
+        <label>Age</label>
+        <input 
+          [(ngModel)]="user.age" 
+          name="age" 
+          type="number" 
+          class="form-control" 
+          required 
+          #age="ngModel">
+        <div *ngIf="age.invalid && (age.dirty || age.touched)" class="text-danger">
+          Please fill the age input.
+        </div>
+      </div>
+  
+      <!-- Address Field -->
+      <div class="mb-3">
+        <label>Address</label>
+        <input 
+          [(ngModel)]="user.address" 
+          name="address" 
+          class="form-control" 
+          required 
+          #address="ngModel">
+        <div *ngIf="address.invalid && (address.dirty || address.touched)" class="text-danger">
+          Please fill the address input.
+        </div>
+      </div>
+  
+      <!-- Password Field -->
+      <div class="mb-3">
+        <label>Password</label>
+        <input 
+          [(ngModel)]="user.password" 
+          name="password" 
+          type="password" 
+          class="form-control" 
+          required 
+          #password="ngModel">
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+          Please fill the password input.
+        </div>
+      </div>
+  
+      <!-- Submit Button -->
+      <button 
+        class="btn btn-primary" 
+        [disabled]="userForm.invalid">
+        {{ userId ? 'Update' : 'Create' }}
+      </button>
+    </form>
+  </div>
+  

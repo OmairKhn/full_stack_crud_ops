@@ -1,0 +1,44 @@
+# Ignore Node.js dependencies in backend
+/backend/node_modules/
+backend/.env
+backend/.env.*.local
+backend/logs/
+backend/*.log
+
+# Ignore React build and dependencies
+/clients/React/node_modules/
+/clients/React/build/
+/clients/React/.env
+/clients/React/.env.*.local
+
+# Ignore Angular build and dependencies
+/clients/Angular/node_modules/
+/clients/Angular/dist/
+/clients/Angular/.env
+/clients/Angular/.env.*.local
+
+# IDE/editor configs (optional)
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Common logs and temp
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Ignore all coverage and build outputs
+coverage/
+dist/
+build/
+
+# Optional caches
+.npm/
+.eslintcache
+*.tsbuildinfo
