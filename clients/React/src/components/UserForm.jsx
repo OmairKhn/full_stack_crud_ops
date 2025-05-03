@@ -15,21 +15,44 @@ export default function UserForm() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) =>
-    state.users.list.find((user) => user._id === id)
-  );
+
+  // ✅ FIXED: use selectedUser instead of searching in list
+  const user = useSelector((state) => state.users.selectedUser);
 
   useEffect(() => {
     if (id && !user) {
       dispatch(getUser(id)).then((res) => {
         if (res.payload) {
-          setForm(res.payload);
+          // ✅ SAFELY update only known fields
+          setForm((prev) => ({
+            ...prev,
+            name: res.payload.name || "",
+            email: res.payload.email || "",
+            age: res.payload.age || "",
+            adress: res.payload.adress || "",
+            password: res.payload.password || "",
+          }));
         }
       });
     } else if (user) {
-      setForm(user);
+      // ✅ If already present in store
+      setForm((prev) => ({
+        ...prev,
+        name: user.name || "",
+        email: user.email || "",
+        age: user.age || "",
+        adress: user.adress || "",
+        password: user.password || "",
+      }));
     }
   }, [id, user, dispatch]);
+
+  // ✅ Optional: Clear selectedUser on unmount
+  useEffect(() => {
+    return () => {
+      dispatch({ type: "users/clearSelectedUser" }); // <-- implement this in slice
+    };
+  }, [dispatch]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -38,7 +61,7 @@ export default function UserForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (id) {
-      dispatch(updateUser({ id, data: form }));
+      dispatch(updateUser({ id, userData: form }));
     } else {
       dispatch(createUser(form));
     }
@@ -62,7 +85,8 @@ export default function UserForm() {
               }
               name={field}
               className="form-control"
-              value={form[field]}
+              // ✅ FIXED: ensure value is never undefined
+              value={form[field] ?? ""}
               onChange={handleChange}
               required
             />
