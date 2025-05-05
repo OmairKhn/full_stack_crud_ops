@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers, deleteUser } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,9 @@ export default function UserList() {
   const navigate = useNavigate();
   const { list, page, totalPages } = useSelector((state) => state.users);
 
+  // 🔍 Local state to manage search input
+  const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
     dispatch(fetchUsers(page));
   }, [dispatch, page]);
@@ -16,9 +19,27 @@ export default function UserList() {
     dispatch(fetchUsers(newPage));
   };
 
+  // 🔍 Filter users by name, email, or address based on search term
+  const filteredUsers = list.filter((user) =>
+    [user.name, user.email, user.adress]
+      .some((field) => field?.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   return (
     <div className="container mt-4">
       <h2>User List</h2>
+
+      {/* 🔍 Search Box */}
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by name, email, or address..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <div className="table-responsive">
         <table className="table table-bordered mt-3">
           <thead>
@@ -27,7 +48,7 @@ export default function UserList() {
             </tr>
           </thead>
           <tbody>
-            {list.map((user) => (
+            {filteredUsers.map((user) => (
               <tr key={user._id}>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
@@ -43,6 +64,9 @@ export default function UserList() {
                 </td>
               </tr>
             ))}
+            {filteredUsers.length === 0 && (
+              <tr><td colSpan="5" className="text-center text-muted">No matching users found</td></tr>
+            )}
           </tbody>
         </table>
       </div>
